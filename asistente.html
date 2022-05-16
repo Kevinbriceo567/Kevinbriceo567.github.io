@@ -1,405 +1,446 @@
-<script>
-    $("#nav-link-inicio").removeClass("active");
-    $("#nav-link-test").addClass("active");
-</script>
+<!doctype html>
+<html class="no-js h-100" lang="es">
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>MASBOT</title>
+    <meta name="description"
+        content="A high-quality &amp; free Bootstrap admin dashboard template pack that comes with lots of templates and components.">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" id="main-stylesheet" data-version="1.1.0" href="/styles/shards-dashboards.1.1.0.min.css">
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 
-<script>
-    let nLog = 0;
-    function sintesis(texto) {
-        let voices = [];
-        const voiceschanged = () => {
-            console.log(`Voices #: ${speechSynthesis.getVoices().length}`);
-            voices = speechSynthesis.getVoices();
-            speechSynthesis.getVoices().forEach(voice => {
-                console.log(voice.name, "/", voice.lang)
-            })
-        }
-        speechSynthesis.onvoiceschanged = voiceschanged;
-        var sampleText = texto;
-        var utterance = new SpeechSynthesisUtterance(sampleText);
-        utterance.lang = 'es-US';
-        utterance.pitch = 1;
-        utterance.volume = 1;
-        utterance.rate = 1.1;
-        speechSynthesis.speak(utterance);
-        $("#salidaAsistente").val(texto);
+    <script src="artyom.window.js"></script>
 
-        oldHtml = $("#salidasTableBody").html();
 
-        $("#salidasTableBody").html(`<tr>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+</head>
+
+<body class="h-100">
+    <!-- / .main-navbar -->
+    <div class="main-content-container container-fluid px-4">
+
+        <script>
+            $("#nav-link-inicio").removeClass("active");
+            $("#nav-link-test").addClass("active");
+        </script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+        <script>
+            let nLog = 0;
+            function sintesis(texto) {
+                let voices = [];
+                const voiceschanged = () => {
+                    console.log(`Voices #: ${speechSynthesis.getVoices().length}`);
+                    voices = speechSynthesis.getVoices();
+                    speechSynthesis.getVoices().forEach(voice => {
+                        console.log(voice.name, "/", voice.lang)
+                    })
+                }
+                speechSynthesis.onvoiceschanged = voiceschanged;
+                var sampleText = texto;
+                var utterance = new SpeechSynthesisUtterance(sampleText);
+                utterance.lang = 'es-US';
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                utterance.rate = 1.1;
+                speechSynthesis.speak(utterance);
+                $("#salidaAsistente").val(texto);
+
+                oldHtml = $("#salidasTableBody").html();
+
+                $("#salidasTableBody").html(`<tr>
                                             <td>`+ nLog + `</td>
                                             <td>`+ texto + `</td>
                                             <td>`+ new Date().toLocaleTimeString() + `</td>
                                         </tr>` + oldHtml);
 
-        nLog++;
-    }
+                nLog++;
+            }
 
-    var artyom = undefined;
+            var artyom = undefined;
 
-    window.onload = function () {
-        artyom = new Artyom();
+            window.onload = function () {
+                artyom = new Artyom();
 
-        if (artyom.recognizingSupported()) {
-            console.log("Artyom can process commands");
-        } else {
-            console.log("This browser doesn't support webkitSpeechRecognition");
-        }
+                if (artyom.recognizingSupported()) {
+                    console.log("Artyom can process commands");
+                } else {
+                    console.log("This browser doesn't support webkitSpeechRecognition");
+                }
 
-        artyom.fatality();// Detener cualquier instancia previa
-        artyom.initialize({
-            lang: "es-ES",
-            continuous: true,
-            debug: true,
-            listen: true,
-            speed: 1.1, // Talk a little bit slow
-            mode: "quick",
-            soundex: true,
-        }).then(() => {
-            console.log("Artyom succesfully initialized");
-            console.log(artyom.getVoices());
-        }).catch((err) => {
-            console.log("Artyom couldn't be initialized, please check the console for errors");
-            console.log(err);
-        });
+                artyom.fatality();// Detener cualquier instancia previa
+                artyom.initialize({
+                    lang: "es-ES",
+                    continuous: true,
+                    debug: true,
+                    listen: true,
+                    speed: 1.1, // Talk a little bit slow
+                    mode: "quick",
+                    soundex: true,
+                }).then(() => {
+                    console.log("Artyom succesfully initialized");
+                    console.log(artyom.getVoices());
+                }).catch((err) => {
+                    console.log("Artyom couldn't be initialized, please check the console for errors");
+                    console.log(err);
+                });
 
-        artyom.addCommands({
-            indexes: ["Hola"],
-            action: function () {
-                sintesis("hola, como estás?");
-                return true;
-            }
-        });
+                artyom.addCommands({
+                    indexes: ["Hola"],
+                    action: function () {
+                        sintesis("hola, como estás?");
+                        return true;
+                    }
+                });
 
-        artyom.addCommands({
-            indexes: ["Bien"],
-            action: function () {
-                sintesis("me alegro de eso");
-                return true;
-            }
-        });
-        artyom.addCommands({
-            indexes: ["qué toca hoy", "que toca hoy"],
-            action: function () {
-                sintesis("hoy toca presentar el avance");
-                return true;
-            }
-        });
-        artyom.addCommands({
-            indexes: ["qué haces", "que haces"],
-            action: function () {
-                sintesis("ofrezco asistencia virtual");
-                return true;
-            }
-        });
-        artyom.addCommands({
-            indexes: ["gracias"],
-            action: function () {
-                sintesis("de nada");
-                return true;
-            }
-        });
-        artyom.addCommands({
-            indexes: ["necesito ayuda"],
-            action: function () {
-                sintesis("puedo ayudarte");
-                return true;
-            }
-        });
-        artyom.addCommands({
-            indexes: ["cuál es la mejor universidad", "cual es la mejor universidad"],
-            action: function () {
-                sintesis("sin ninguna duda, la universidad andrés bello");
-                return true;
-            }
-        });
-        artyom.addCommands({
-            indexes: ["viajemos"],
-            action: function () {
-                window.location.href = "https://www.despegar.cl/";
-                return true;
-            }
-        });
-        artyom.addCommands({
-            indexes: ["quién es José Daniel", "quién es Jose Daniel"],
-            action: function () {
-                sintesis("es tremendo gafo");
-                return true;
-            }
-        });
+                artyom.addCommands({
+                    indexes: ["Bien"],
+                    action: function () {
+                        sintesis("me alegro de eso");
+                        return true;
+                    }
+                });
+                artyom.addCommands({
+                    indexes: ["qué toca hoy", "que toca hoy"],
+                    action: function () {
+                        sintesis("hoy toca presentar el avance");
+                        return true;
+                    }
+                });
+                artyom.addCommands({
+                    indexes: ["qué haces", "que haces"],
+                    action: function () {
+                        sintesis("ofrezco asistencia virtual");
+                        return true;
+                    }
+                });
+                artyom.addCommands({
+                    indexes: ["gracias"],
+                    action: function () {
+                        sintesis("de nada");
+                        return true;
+                    }
+                });
+                artyom.addCommands({
+                    indexes: ["necesito ayuda"],
+                    action: function () {
+                        sintesis("puedo ayudarte");
+                        return true;
+                    }
+                });
+                artyom.addCommands({
+                    indexes: ["cuál es la mejor universidad", "cual es la mejor universidad"],
+                    action: function () {
+                        sintesis("sin ninguna duda, la universidad andrés bello");
+                        return true;
+                    }
+                });
+                artyom.addCommands({
+                    indexes: ["viajemos"],
+                    action: function () {
+                        window.location.href = "https://www.despegar.cl/";
+                        return true;
+                    }
+                });
+                artyom.addCommands({
+                    indexes: ["quién es José Daniel", "quién es Jose Daniel"],
+                    action: function () {
+                        sintesis("es tremendo gafo");
+                        return true;
+                    }
+                });
 
-        let nEntrada = 0;
-        artyom.redirectRecognizedTextOutput(function (recognized, isFinal) {
-            if (isFinal) {
-                $("#entradaAsistente").val(recognized);
-                oldHtml = $("#entradasTableBody").html();
-                $("#entradasTableBody").html(`<tr>
+                let nEntrada = 0;
+                artyom.redirectRecognizedTextOutput(function (recognized, isFinal) {
+                    if (isFinal) {
+                        $("#entradaAsistente").val(recognized);
+                        oldHtml = $("#entradasTableBody").html();
+                        $("#entradasTableBody").html(`<tr>
                                             <td>`+ nEntrada + `</td>
                                             <td>`+ recognized + `</td>
                                             <td>`+ new Date().toLocaleTimeString() + `</td>
                                         </tr>` + oldHtml);
-                nEntrada++;
+                        nEntrada++;
 
-            } else {
-                console.log(recognized);
-            }
-        });
+                    } else {
+                        console.log(recognized);
+                    }
+                });
 
-    };
+            };
 
-</script>
+        </script>
 
-<!-- Page Header -->
-<div class="page-header row no-gutters py-4 mb-3 border-bottom">
-    <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
-        <span class="text-uppercase page-subtitle">Asistente</span>
-        <h3 class="page-title"> <i class="fa fa-comments"></i> Prueba</h3>
-    </div>
-</div>
-<!-- End Page Header -->
-<div class="row">
-
-    <div class="col-lg-12 mb-4">
-        <!-- Input & Button Groups -->
-        <div class="card card-small mb-4">
-            <div class="card-header border-bottom">
-                <h6 class="m-0">Opciones</h6>
+        <!-- Page Header -->
+        <div class="page-header row no-gutters py-4 mb-3 border-bottom">
+            <div class="col-12 col-sm-4 text-center text-sm-left mb-0">
+                <span class="text-uppercase page-subtitle">Asistente</span>
+                <h3 class="page-title"> <i class="fa fa-comments"></i> Prueba</h3>
             </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item px-3">
-                    <form action="/campanas/agregar" method="POST" enctype="multipart/form-data" id="cargarReglaForm">
-                        <div class="row">
-                            <div class="col-lg-4">
-                                <strong class="text-muted d-block mb-2">Consulta esperada</strong>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" name="consultaInput" id="consultaInput"
-                                        required>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <strong class="text-muted d-block mb-2">Respuesta</strong>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" name="respuestaInput" id="respuestaInput"
-                                        required>
-                                </div>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong class="d-block mb-2" style="color: white;">1</strong>
-                                <div class="input-group mb-3">
-                                    <input type="submit" class="form-control btn btn-primary" value="Agregar"
-                                        id="reglaBtn">
-                                </div>
-                            </div>
-                            <div class="col-lg-2">
-                                <strong class="d-block mb-2" style="color: white;">1</strong>
-                                <div class="input-group mb-3">
-                                    <input type="button" class="form-control btn btn-warning" value="Ver reglas"
-                                        data-toggle="modal" data-target="#reglasModal" id="reglaModalBtn">
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-
-                    <script>
-                        $("#cargarReglaForm").submit((e) => {
-                            e.preventDefault();
-
-                            console.log("NUEVA CONSULTA:", $("#respuestaInput").val());
-
-                            respuesta = $("#respuestaInput").val()
-
-                            artyom.addCommands({
-                                indexes: [$("#consultaInput").val()],
-                                action: function () {
-                                    sintesis(respuesta);
-                                    return true;
-                                }
-                            });
-
-                            $("#consultaInput").val("");
-                            $("#respuestaInput").val("");
-                            toastr["success"]("Regla agregada");
-
-                        })
-                    </script>
-
-                </li>
-            </ul>
         </div>
-        <!-- / Input & Button Groups -->
-    </div>
+        <!-- End Page Header -->
+        <div class="row">
 
-    <div class="col-lg-5 mb-4">
-        <!-- Input & Button Groups -->
-        <div class="card card-small mb-4">
-            <div class="card-header border-bottom">
-                <h6 class="m-0">Entrada</h6>
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item px-3">
-                    <form action="/campanas/agregar" method="POST" enctype="multipart/form-data" id="cargarCampanaForm">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <strong class="text-muted d-block mb-2">Última Entrada</strong>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">O</span>
+            <div class="col-lg-12 mb-4">
+                <!-- Input & Button Groups -->
+                <div class="card card-small mb-4">
+                    <div class="card-header border-bottom">
+                        <h6 class="m-0">Opciones</h6>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item px-3">
+                            <form action="/campanas/agregar" method="POST" enctype="multipart/form-data"
+                                id="cargarReglaForm">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <strong class="text-muted d-block mb-2">Consulta esperada</strong>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" name="consultaInput"
+                                                id="consultaInput" required>
+                                        </div>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Nombre..." name="nombre"
-                                        minlength="5" maxlength="60" onchange="updateNombre();" id="entradaAsistente"
-                                        aria-label="Username" required aria-describedby="basic-addon1">
-                                </div>
-                            </div>
-                            <div class="col-lg-12" id="entradaCol">
-                                <strong class="text-muted d-block mb-2">LOG Entrada</strong>
-                                <table class="table mb-0" id="entradasTable">
-                                    <thead class="bg-light">
-                                        <tr>
-                                            <th scope="col" class="border-0">ID</th>
-                                            <th scope="col" class="border-0">Texto</th>
-                                            <th scope="col" class="border-0">Tiempo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="entradasTableBody">
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </form>
-                </li>
-            </ul>
-        </div>
-        <!-- / Input & Button Groups -->
-    </div>
-
-    <div class="col-lg-2">
-        <img style="width: 100%;" src="/images/assistant.png">
-    </div>
-
-    <div class="col-lg-5 mb-4">
-        <!-- Input & Button Groups -->
-        <div class="card card-small mb-4">
-            <div class="card-header border-bottom">
-                <h6 class="m-0">Salida</h6>
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item px-3">
-                    <form action="/campanas/agregar" method="POST" enctype="multipart/form-data" id="cargarCampanaForm">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <strong class="text-muted d-block mb-2">Última Salida</strong>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">O</span>
+                                    <div class="col-lg-4">
+                                        <strong class="text-muted d-block mb-2">Respuesta</strong>
+                                        <div class="input-group mb-3">
+                                            <input type="text" class="form-control" name="respuestaInput"
+                                                id="respuestaInput" required>
+                                        </div>
                                     </div>
-                                    <input type="text" class="form-control" placeholder="Nombre..." name="nombre"
-                                        minlength="5" maxlength="60" onchange="updateNombre();" id="salidaAsistente"
-                                        aria-label="Username" required aria-describedby="basic-addon1">
+                                    <div class="col-lg-2">
+                                        <strong class="d-block mb-2" style="color: white;">1</strong>
+                                        <div class="input-group mb-3">
+                                            <input type="submit" class="form-control btn btn-primary" value="Agregar"
+                                                id="reglaBtn">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <strong class="d-block mb-2" style="color: white;">1</strong>
+                                        <div class="input-group mb-3">
+                                            <input type="button" class="form-control btn btn-warning" value="Ver reglas"
+                                                data-toggle="modal" data-target="#reglasModal" id="reglaModalBtn">
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-12" id="salidaCol">
-                                <strong class="text-muted d-block mb-2">LOG Salida</strong>
-                                <table class="table mb-0" id="salidasTable">
-                                    <thead class="bg-light">
-                                        <tr>
-                                            <th scope="col" class="border-0">ID</th>
-                                            <th scope="col" class="border-0">Texto</th>
-                                            <th scope="col" class="border-0">Tiempo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="salidasTableBody">
-                                    </tbody>
-                                </table>
-                            </div>
+                            </form>
+
+                            <script>
+                                $("#cargarReglaForm").submit((e) => {
+                                    e.preventDefault();
+
+                                    console.log("NUEVA CONSULTA:", $("#respuestaInput").val());
+
+                                    respuesta = $("#respuestaInput").val()
+
+                                    artyom.addCommands({
+                                        indexes: [$("#consultaInput").val()],
+                                        action: function () {
+                                            sintesis(respuesta);
+                                            return true;
+                                        }
+                                    });
+
+                                    $("#consultaInput").val("");
+                                    $("#respuestaInput").val("");
+                                    toastr["success"]("Regla agregada");
+
+                                })
+                            </script>
+
+                        </li>
+                    </ul>
+                </div>
+                <!-- / Input & Button Groups -->
+            </div>
+
+            <div class="col-lg-5 mb-4">
+                <!-- Input & Button Groups -->
+                <div class="card card-small mb-4">
+                    <div class="card-header border-bottom">
+                        <h6 class="m-0">Entrada</h6>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item px-3">
+                            <form action="/campanas/agregar" method="POST" enctype="multipart/form-data"
+                                id="cargarCampanaForm">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <strong class="text-muted d-block mb-2">Última Entrada</strong>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">O</span>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="Nombre..."
+                                                name="nombre" minlength="5" maxlength="60" onchange="updateNombre();"
+                                                id="entradaAsistente" aria-label="Username" required
+                                                aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12" id="entradaCol">
+                                        <strong class="text-muted d-block mb-2">LOG Entrada</strong>
+                                        <table class="table mb-0" id="entradasTable">
+                                            <thead class="bg-light">
+                                                <tr>
+                                                    <th scope="col" class="border-0">ID</th>
+                                                    <th scope="col" class="border-0">Texto</th>
+                                                    <th scope="col" class="border-0">Tiempo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="entradasTableBody">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <!-- / Input & Button Groups -->
+            </div>
+
+            <div class="col-lg-2">
+                <img style="width: 100%;" src="/images/assistant.png">
+            </div>
+
+            <div class="col-lg-5 mb-4">
+                <!-- Input & Button Groups -->
+                <div class="card card-small mb-4">
+                    <div class="card-header border-bottom">
+                        <h6 class="m-0">Salida</h6>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item px-3">
+                            <form action="/campanas/agregar" method="POST" enctype="multipart/form-data"
+                                id="cargarCampanaForm">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <strong class="text-muted d-block mb-2">Última Salida</strong>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">O</span>
+                                            </div>
+                                            <input type="text" class="form-control" placeholder="Nombre..."
+                                                name="nombre" minlength="5" maxlength="60" onchange="updateNombre();"
+                                                id="salidaAsistente" aria-label="Username" required
+                                                aria-describedby="basic-addon1">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12" id="salidaCol">
+                                        <strong class="text-muted d-block mb-2">LOG Salida</strong>
+                                        <table class="table mb-0" id="salidasTable">
+                                            <thead class="bg-light">
+                                                <tr>
+                                                    <th scope="col" class="border-0">ID</th>
+                                                    <th scope="col" class="border-0">Texto</th>
+                                                    <th scope="col" class="border-0">Tiempo</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="salidasTableBody">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+                <!-- / Input & Button Groups -->
+            </div>
+
+        </div>
+
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="reglasModal" tabindex="-1" role="dialog" aria-labelledby="reglasModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document" style="margin-top: 10%;">
+
+                <form method="POST" action="/campanas/eliminar">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="reglasModalLabel">Reglas de asistencia</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                    </form>
-                </li>
-            </ul>
-        </div>
-        <!-- / Input & Button Groups -->
-    </div>
+                        <div class="modal-body" id="reglasModalBody" style="text-align: center;">
+                            <table class="table mb-0" id="entradasTable">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th scope="col" class="border-0">ID</th>
+                                        <th scope="col" class="border-0">Consulta esperada</th>
+                                        <th scope="col" class="border-0">Respuesta</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="reglasTableBody">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer" id="reglasModalFooter">
+                            <button type="button" class="btn btn-warning" data-dismiss="modal">Volver</button>
+                        </div>
+                    </div>
 
-</div>
+                </form>
 
-
-
-<!-- Modal -->
-<div class="modal fade" id="reglasModal" tabindex="-1" role="dialog" aria-labelledby="reglasModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document" style="margin-top: 10%;">
-
-        <form method="POST" action="/campanas/eliminar">
-
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="reglasModalLabel">Reglas de asistencia</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="reglasModalBody" style="text-align: center;">
-                    <table class="table mb-0" id="entradasTable">
-                        <thead class="bg-light">
-                            <tr>
-                                <th scope="col" class="border-0">ID</th>
-                                <th scope="col" class="border-0">Consulta esperada</th>
-                                <th scope="col" class="border-0">Respuesta</th>
-                            </tr>
-                        </thead>
-                        <tbody id="reglasTableBody">
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer" id="reglasModalFooter">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal">Volver</button>
-                </div>
-            </div>
-
-        </form>
-
-    </div>
-</div>
-
-
-
-
-
-
-
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document" style="margin-top: 10%;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Carga de campaña</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" style="text-align: center;">
-                <p>Se cargarán <span id="nMensajesParaCargar"></span> mensajes válidos en la campaña <span
-                        id="nombreCampañaParaCargar"></span> para enviar a fecha de <span id="fechaParaCargar"></span>
-                </p>
-
-                <p style="color: red;">¿Seguro de cargar campaña?</p>
-            </div>
-            <div class="modal-footer" id="carga-footer-div">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="btnConfirmarCarga">Confirmar carga</button>
             </div>
         </div>
-    </div>
-</div>
 
-<script>
-    $("#btnConfirmarCarga").click((e) => {
-        $("#submitBtnConfirmation").click();
-        //$("#submitBtnConfirmation").attr("disabled");
-        $("#carga-footer-div").empty();
-        $("#carga-footer-div").append('<button type="button" class="btn btn-warning" id="btnConfirmarCarga" disabled> <i class="fa fa-spinner"></i> Cargando</button>');
-    })
-</script>
+
+
+
+
+
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document" style="margin-top: 10%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Carga de campaña</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="text-align: center;">
+                        <p>Se cargarán <span id="nMensajesParaCargar"></span> mensajes válidos en la campaña <span
+                                id="nombreCampañaParaCargar"></span> para enviar a fecha de <span
+                                id="fechaParaCargar"></span>
+                        </p>
+
+                        <p style="color: red;">¿Seguro de cargar campaña?</p>
+                    </div>
+                    <div class="modal-footer" id="carga-footer-div">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="btnConfirmarCarga">Confirmar carga</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $("#btnConfirmarCarga").click((e) => {
+                $("#submitBtnConfirmation").click();
+                //$("#submitBtnConfirmation").attr("disabled");
+                $("#carga-footer-div").empty();
+                $("#carga-footer-div").append('<button type="button" class="btn btn-warning" id="btnConfirmarCarga" disabled> <i class="fa fa-spinner"></i> Cargando</button>');
+            })
+        </script>
+
+    </div>
+</body>
+
+</html>
