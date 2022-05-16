@@ -1,0 +1,46 @@
+<button id="btn">Allow Voice Synthesis</button>
+<script src="artyom.window.js"></script>
+<script>
+    var artyom = new Artyom();
+
+    if (artyom.recognizingSupported()) {
+        console.log("Artyom can process commands");
+    } else {
+        console.log("This browser doesn't support webkitSpeechRecognition");
+    }
+
+
+
+    // Needed user interaction at least once in the website to make
+    // it work automatically without user interaction later... thanks google .i.
+    document.getElementById("btn").addEventListener("click", function () {
+        artyom.fatality();// Detener cualquier instancia previa
+
+        artyom.addCommands({
+            indexes: ["Hola"],
+            action: function () {
+                alert("hola, como estás?");
+                return true;
+            }
+        });
+
+        artyom.initialize({
+            lang: "es-ES",
+            continuous: true,
+            debug: true,
+            listen: true,
+            speed: 1.1, // Talk a little bit slow
+            mode: "quick",
+            soundex: true,
+        }).then(() => {
+            console.log("Artyom succesfully initialized");
+            console.log(artyom.getVoices());
+        }).catch((err) => {
+            console.log("Artyom couldn't be initialized, please check the console for errors");
+            console.log(err);
+        });
+
+        artyom.say("Hello World !");
+
+    }, false);
+</script>
